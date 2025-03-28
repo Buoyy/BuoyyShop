@@ -1,0 +1,9 @@
+name: Shop
+version: '1.0'
+main: com.github.buoyy.shop.Shop
+api-version: '1.21'
+depend: [ BuoyyEcon ]
+commands:
+  shop:
+    usage: /shop
+    description: iouyeueiv
