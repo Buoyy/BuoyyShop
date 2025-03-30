@@ -19,7 +19,7 @@ public class MainMenuGUI extends InventoryGUI {
                 .setName("General Shop")
                 .setLore("A shop where you can buy and sell", "general items for", "reasonable prices.")
                 .setOnClick(e-> Shop.getGuiManager()
-                        .openGUI((Player)e.getWhoClicked(), new GeneralShopGUI(this)))
+                        .openGUI((Player)e.getWhoClicked(), new GeneralShopGUI()))
                 .build();
         InvButton custom = InvButton.Builder.newBuilder()
                 .setIcon(Material.ELYTRA)

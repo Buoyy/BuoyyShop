@@ -7,6 +7,7 @@ import com.github.buoyy.api.gui.GUIManager;
 import com.github.buoyy.api.util.Messenger;
 import com.github.buoyy.shop.gui.GUIListener;
 import com.github.buoyy.shop.gui.MainMenuGUI;
+import com.github.buoyy.shop.util.ShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,10 +19,12 @@ public final class Shop extends JavaPlugin {
     private static IEconomy economy = null;
     private static GUIManager guiManager;
     private static YAML generalShop;
+    private static ShopManager shopManager;
     @Override
     public void onEnable() {
         // Plugin startup logic
-        if (!hookEcon()) {
+        if (!hookEcon())
+        {
             messenger.consoleBad("Couldn't hook with economy! Is BuoyyEcon present/functional?");
             return;
         }
@@ -29,6 +32,7 @@ public final class Shop extends JavaPlugin {
         instanceObjects();
         messenger.consoleGood("Hooked with BuoyyEcon.");
         getServer().getPluginManager().registerEvents(new GUIListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatInputListener(), this);
         BaseCommand shopCmd = new BaseCommand("/shop", player -> guiManager.openGUI(player, new MainMenuGUI()));
         Objects.requireNonNull(getCommand("shop")).setExecutor(shopCmd);
     }
@@ -38,6 +42,7 @@ public final class Shop extends JavaPlugin {
         messenger = new Messenger("SHOP");
         guiManager = new GUIManager();
         generalShop = new YAML(this.getName(), "general", messenger);
+        shopManager = new ShopManager();
     }
 
     private boolean hookEcon() {
@@ -55,5 +60,8 @@ public final class Shop extends JavaPlugin {
     }
     public static IEconomy getEconomy() {
         return economy;
+    }
+    public static ShopManager getShopManager() {
+        return shopManager;
     }
 }
