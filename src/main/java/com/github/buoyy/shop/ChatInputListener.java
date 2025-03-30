@@ -18,7 +18,8 @@ public class ChatInputListener implements Listener
             case SHOP_BUY ->
                 manager.buyItem(sender, manager.getItemByPlayer(sender.getPlayer()),
                         Integer.parseInt(e.getInput()));
-            case SHOP_SELL -> e.getSender().sendMessage("You sold: " + e.getInput());
+            case SHOP_SELL -> manager.sellItem(sender, manager.getItemByPlayer(sender.getPlayer()),
+                    Integer.parseInt(e.getInput()));
         }
     }
 }

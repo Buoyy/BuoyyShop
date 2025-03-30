@@ -3,7 +3,7 @@ package com.github.buoyy.shop.util;
 import com.github.buoyy.api.economy.CurrencyType;
 import com.github.buoyy.api.gui.InvButton;
 import com.github.buoyy.shop.Shop;
-import com.github.buoyy.shop.gui.ItemActionGUI;
+import com.github.buoyy.shop.gui.ItemBuySellGUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -30,6 +30,6 @@ public class ShopItem {
     }
     private void openItemMenu(Player player)
     {
-        Shop.getGuiManager().openGUI(player, new ItemActionGUI(this, player));
+        Shop.getGuiManager().openGUI(player, new ItemBuySellGUI(this));
     }
 }
