@@ -6,16 +6,47 @@ import com.github.buoyy.api.economy.Transaction;
 import com.github.buoyy.api.inputchat.InputType;
 import com.github.buoyy.api.inputchat.event.ChatInputStartEvent;
 import com.github.buoyy.shop.Shop;
+import com.github.buoyy.shop.gui.GeneralShopGUI;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ShopManager {
     private final IEconomy economy = Shop.getEconomy();
-    private final Map<Player, ShopItem> playerItemMap = new HashMap<>();
+    private final Map<Player, ShopItem> playerItemMap;
+    private final List<GeneralShopGUI> generalShopPages;
+    private final FileConfiguration generalShop;
+    public ShopManager()
+    {
+        playerItemMap = new HashMap<>();
+        generalShopPages = new ArrayList<>();
+        generalShop = Shop.getGeneralShop().getConfig();
+    }
+    public void initShopPages()
+    {
+        int pages = getTotalPages();
+        for (String ignored : generalShop.getKeys(false))
+        {
+            for (int j = 0; j <= pages; j++)
+            {
+                generalShopPages.add(new GeneralShopGUI(j));
+            }
+        }
+    }
+    public int getTotalPages()
+    {
+        return (int) Math.ceil(generalShop.getKeys(false).size()/45f);
+    }
+    public void openShopPage(Player player, int pageIndex)
+    {
+        Shop.getGuiManager().openGUI(player, generalShopPages.get(pageIndex));
+    }
     public void buyItem(Player player, ShopItem item, int count)
     {
         int totalPrice = item.buy * count;
@@ -46,7 +77,7 @@ public class ShopManager {
         player.sendMessage("You sold "+count+" for "+economy.format(totalPrice, item.currency));
         player.getInventory().removeItem(new ItemStack(item.material, count));
     }
-    public void addPlayerWithItem(Player player, ShopItem item)
+    private void addPlayerWithItem(Player player, ShopItem item)
     {
         this.playerItemMap.put(player, item);
     }

@@ -14,20 +14,42 @@ import java.util.Objects;
 
 public class GeneralShopGUI extends InventoryGUI
 {
-    FileConfiguration shop;
-    public GeneralShopGUI()
+    private final int index;
+    private final FileConfiguration shop;
+    public GeneralShopGUI(int index)
     {
         this.inv = Bukkit.createInventory(null, 54, "General Shop");
         this.prevInv = new MainMenuGUI();
+        this.index = index;
         shop = Shop.getGeneralShop().getConfig();
     }
 
     @Override
     public void decorate()
     {
-        for (String i : shop.getKeys(false))
+        for (int i = index*45; i < 45*(index+1); i++)
         {
-            addItemFromFile(Integer.parseInt(i));
+            addItemFromFile(i);
+        }
+        if (index > 0)
+        {
+            InvButton prevPage = InvButton.Builder.newBuilder()
+                    .setIcon(Material.ARROW)
+                    .setName("Previous Page")
+                    .setOnClick(e->
+                            Shop.getShopManager().openShopPage((Player)e.getWhoClicked(), index-1))
+                    .build();
+            this.addButton(46, prevPage);
+        }
+        if (index < Shop.getShopManager().getTotalPages()-1)
+        {
+            InvButton nextPage = InvButton.Builder.newBuilder()
+                    .setIcon(Material.ARROW)
+                    .setName("Next Page")
+                    .setOnClick(e->
+                            Shop.getShopManager().openShopPage((Player)e.getWhoClicked(), index+1))
+                    .build();
+            this.addButton(52, nextPage);
         }
         InvButton back = InvButton.Builder.newBuilder()
                 .setIcon(Material.RED_WOOL)

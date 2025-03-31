@@ -7,7 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-public class MainMenuGUI extends InventoryGUI {
+public class MainMenuGUI extends InventoryGUI
+{
     public MainMenuGUI() {
         this.inv = Bukkit.createInventory(null, 9, "Test");
     }
@@ -18,8 +19,11 @@ public class MainMenuGUI extends InventoryGUI {
                 .setIcon(Material.WHEAT)
                 .setName("General Shop")
                 .setLore("A shop where you can buy and sell", "general items for", "reasonable prices.")
-                .setOnClick(e-> Shop.getGuiManager()
-                        .openGUI((Player)e.getWhoClicked(), new GeneralShopGUI()))
+                .setOnClick(e->
+                {
+                    Shop.getShopManager().initShopPages();
+                    Shop.getShopManager().openShopPage((Player)e.getWhoClicked(), 0);
+                })
                 .build();
         InvButton custom = InvButton.Builder.newBuilder()
                 .setIcon(Material.ELYTRA)

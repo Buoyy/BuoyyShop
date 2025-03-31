@@ -13,7 +13,7 @@ public class ItemBuySellGUI extends InventoryGUI {
     public ItemBuySellGUI(ShopItem item)
     {
         this.inv = Bukkit.createInventory(null, 9, "Buy or Sell?");
-        this.prevInv = new GeneralShopGUI();
+        this.prevInv = new GeneralShopGUI(0);
         this.item = item;
     }
 

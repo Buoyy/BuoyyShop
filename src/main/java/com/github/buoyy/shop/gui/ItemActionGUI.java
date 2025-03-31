@@ -18,7 +18,7 @@ public class ItemActionGUI extends InventoryGUI {
     public ItemActionGUI(ShopItem item, Player sender, boolean isBuyMenu)
     {
         this.inv = Bukkit.createInventory(null, 18, "Buy/Sell item?");
-        this.prevInv = new GeneralShopGUI();
+        this.prevInv = new GeneralShopGUI(0);
         this.item = item;
         this.sender = sender;
         this.isBuyMenu = isBuyMenu;
