@@ -13,7 +13,8 @@ public class ShopItem {
     public Material material;
     public InvButton button;
     public CurrencyType currency;
-    public ShopItem(Material material, CurrencyType currency, int buy, int sell, int count)
+    public ShopItem(Material material, CurrencyType currency, int buy,
+                    int sell, int count, int pageIndex)
     {
         this.material = material;
         this.currency = currency;
@@ -25,11 +26,11 @@ public class ShopItem {
                 .setLore("Buy 1 for "+Shop.getEconomy().format(buy, currency),
                         "Sell 1 for "+Shop.getEconomy().format(sell, currency))
                 .setOnClick(e->
-                        openItemMenu((Player) e.getWhoClicked()))
+                        openItemMenu((Player) e.getWhoClicked(), pageIndex))
                 .build();
     }
-    private void openItemMenu(Player player)
+    private void openItemMenu(Player player, int pageIndex)
     {
-        Shop.getGuiManager().openGUI(player, new ItemBuySellGUI(this));
+        Shop.getGuiManager().openGUI(player, new ItemBuySellGUI(this, pageIndex));
     }
 }

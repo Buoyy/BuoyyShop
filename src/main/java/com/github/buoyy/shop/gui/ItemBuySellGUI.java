@@ -10,10 +10,10 @@ import org.bukkit.entity.Player;
 
 public class ItemBuySellGUI extends InventoryGUI {
     private final ShopItem item;
-    public ItemBuySellGUI(ShopItem item)
+    public ItemBuySellGUI(ShopItem item, int pageIndex)
     {
         this.inv = Bukkit.createInventory(null, 9, "Buy or Sell?");
-        this.prevInv = new GeneralShopGUI(0);
+        this.prevInv = new GeneralShopGUI(pageIndex);
         this.item = item;
     }
 
