@@ -1,24 +1,25 @@
-package com.github.buoyy.shop.gui;
+package com.github.buoyy.shop.gui.general;
 
 import com.github.buoyy.api.gui.InvButton;
 import com.github.buoyy.api.gui.InventoryGUI;
 import com.github.buoyy.api.inputchat.InputType;
 import com.github.buoyy.shop.Shop;
-import com.github.buoyy.shop.util.ShopItem;
+import com.github.buoyy.shop.util.GeneralShopItem;
 import com.github.buoyy.shop.util.ShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class ItemActionGUI extends InventoryGUI {
-    private final ShopItem item;
+    private final GeneralShopItem item;
     private final Player sender;
     private final ShopManager manager;
     private final boolean isBuyMenu;
-    public ItemActionGUI(ShopItem item, Player sender, boolean isBuyMenu)
+    public ItemActionGUI(GeneralShopItem item, Player sender, boolean isBuyMenu)
     {
-        this.inv = Bukkit.createInventory(null, 18, "Buy/Sell item?");
-        this.prevInv = new GeneralShopGUI(0);
+        this.inv = Bukkit.createInventory(null, 18,
+                isBuyMenu ? "Buy" : "Sell");
+        this.prevInv = new GeneralShopPage(0);
         this.item = item;
         this.sender = sender;
         this.isBuyMenu = isBuyMenu;
@@ -37,29 +38,34 @@ public class ItemActionGUI extends InventoryGUI {
     {
         InvButton buy1 = InvButton.Builder.newBuilder()
                 .setIcon(Material.GREEN_CARPET)
-                .setName("Buy 1")
+                .setName(item.prioritiseStack ?
+                        "Buy 1 stack" : "Buy 1")
                 .setOnClick(e->
                 {
-                    manager.buyItem((Player) e.getWhoClicked(), item, 1);
+                    manager.buyGeneralItem((Player) e.getWhoClicked(), item,
+                            item.prioritiseStack ? 64 : 1);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
         InvButton buy64 = InvButton.Builder.newBuilder()
                 .setIcon(Material.GREEN_WOOL)
-                .setName("Buy 64")
+                .setName(item.prioritiseStack ? "Buy 4 stacks" : "Buy 64")
                 .setOnClick(e->
                 {
-                    manager.buyItem((Player) e.getWhoClicked(), item, 64);
+                    manager.buyGeneralItem((Player) e.getWhoClicked(), item,
+                            item.prioritiseStack ? 256 : 64);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
         InvButton buyChoice = InvButton.Builder.newBuilder()
                 .setIcon(Material.GREEN_BANNER)
-                .setName("Buy (?)")
+                .setName(item.prioritiseStack ?
+                        "Buy (?) stacks" : "Buy (?)")
                 .setOnClick(e->
                 {
                     Shop.getShopManager().startChatInput(sender, item.currency,
-                            InputType.SHOP_BUY, this.item);
+                            item.prioritiseStack ? InputType.BUY_STACK : InputType.BUY,
+                            this.item);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
@@ -78,19 +84,21 @@ public class ItemActionGUI extends InventoryGUI {
     {
         InvButton sell1 = InvButton.Builder.newBuilder()
                 .setIcon(Material.CYAN_CARPET)
-                .setName("Sell 1")
+                .setName(item.prioritiseStack ? "Sell 1 stack" : "Sell 1")
                 .setOnClick(e->
                 {
-                    manager.sellItem((Player) e.getWhoClicked(), item, 1);
+                    manager.sellGeneralItem((Player) e.getWhoClicked(), item,
+                            item.prioritiseStack ? 64 : 1);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
         InvButton buy64 = InvButton.Builder.newBuilder()
                 .setIcon(Material.CYAN_WOOL)
-                .setName("Sell 64")
+                .setName(item.prioritiseStack ? "Sell 4 stacks" : "Sell 64")
                 .setOnClick(e->
                 {
-                    manager.sellItem((Player) e.getWhoClicked(), item, 64);
+                    manager.sellGeneralItem((Player) e.getWhoClicked(), item,
+                            item.prioritiseStack ? 256 : 64);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
@@ -100,7 +108,8 @@ public class ItemActionGUI extends InventoryGUI {
                 .setOnClick(e->
                 {
                     Shop.getShopManager().startChatInput(sender, item.currency,
-                            InputType.SHOP_SELL, this.item);
+                            item.prioritiseStack ? InputType.SELL_STACK : InputType.SELL,
+                            this.item);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();

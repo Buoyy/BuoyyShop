@@ -20,18 +20,23 @@ public class MainMenuGUI extends InventoryGUI
                 .setName("General Shop")
                 .setLore("A shop where you can buy and sell", "general items for", "reasonable prices.")
                 .setOnClick(e->
-                    Shop.getShopManager().openShopPage((Player)e.getWhoClicked(), 0))
+                    Shop.getShopManager()
+                            .openGeneralShopPage((Player)e.getWhoClicked(), 0))
+                .build();
+        InvButton yourShop = InvButton.Builder.newBuilder()
+                .setIcon(Material.GREEN_SHULKER_BOX)
+                .setName("Your Shop")
                 .build();
         InvButton custom = InvButton.Builder.newBuilder()
                 .setIcon(Material.ELYTRA)
                 .setName("Custom Shop")
                 .setLore("A shop where you can buy and sell", "your own items for", "(un)reasonable prices.")
-                .setOnClick(e->{
-                    e.getWhoClicked().closeInventory();
-                    e.getWhoClicked().sendMessage("CUSTOM");
-                })
+                .setOnClick(e->
+                    Shop.getShopManager()
+                            .openShopkeepersList((Player)e.getWhoClicked()))
                 .build();
         this.addButton(3, general);
+        this.addButton(4, yourShop);
         this.addButton(5, custom);
         super.decorate();
     }

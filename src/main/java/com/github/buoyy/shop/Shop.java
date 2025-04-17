@@ -12,33 +12,34 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.Objects;
 
 public final class Shop extends JavaPlugin {
+    private static Shop instance;
     private static Messenger messenger;
     private static IEconomy economy = null;
     private static GUIManager guiManager;
     private static YAML generalShop;
     private static ShopManager shopManager;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
-        if (!hookEcon())
-        {
+        if (!hookEcon()) {
             messenger.consoleBad("Couldn't hook with economy! Is BuoyyEcon present/functional?");
             return;
         }
+        createShopsDir();
         saveDefaultConfig();
         instanceObjects();
         messenger.consoleGood("Hooked with BuoyyEcon.");
-        getServer().getPluginManager().registerEvents(new GUIListener(), this);
-        getServer().getPluginManager().registerEvents(new ChatInputListener(), this);
-        BaseCommand shopCmd = new BaseCommand("/shop", player -> guiManager.openGUI(player, new MainMenuGUI()));
-        Objects.requireNonNull(getCommand("shop")).setExecutor(shopCmd);
+        registerEvents();
+        registerCommands();
     }
 
-    private void instanceObjects()
-    {
+    private void instanceObjects() {
+        instance = this;
         messenger = new Messenger("SHOP");
         guiManager = new GUIManager();
         generalShop = new YAML(this.getName(), "general", messenger);
@@ -52,11 +53,41 @@ public final class Shop extends JavaPlugin {
         economy = rsp.getProvider();
         return true;
     }
+
+    private void createShopsDir()
+    {
+        File file = new File(getDataFolder(), "shops");
+        if (!file.exists())
+            if (!file.mkdirs())
+                messenger.consoleBad("Couldn't create shops directory!");
+    }
+
+    private void registerEvents()
+    {
+        getServer().getPluginManager().registerEvents(new GUIListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatInputListener(), this);
+    }
+
+    private void registerCommands()
+    {
+        BaseCommand mainCmd = new BaseCommand("/shop", p->
+                guiManager.openGUI(p, new MainMenuGUI()));
+        Objects.requireNonNull(getCommand("shop")).setExecutor(mainCmd);
+    }
+
     public static GUIManager getGuiManager() {
         return guiManager;
     }
     public static YAML getGeneralShop() {
         return generalShop;
+    }
+    public static Shop getInstance()
+    {
+        return instance;
+    }
+    public static Messenger getMessenger()
+    {
+        return messenger;
     }
     public static IEconomy getEconomy() {
         return economy;

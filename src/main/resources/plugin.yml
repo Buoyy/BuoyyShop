@@ -6,4 +6,7 @@ depend: [ BuoyyEcon ]
 commands:
   shop:
     usage: /shop
-    description: iouyeueiv
+    description: Open main menu for BuoyyShop
+  file:
+    usage: /file
+    description: fff

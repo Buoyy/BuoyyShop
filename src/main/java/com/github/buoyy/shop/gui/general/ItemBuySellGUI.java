@@ -1,19 +1,19 @@
-package com.github.buoyy.shop.gui;
+package com.github.buoyy.shop.gui.general;
 
 import com.github.buoyy.api.gui.InvButton;
 import com.github.buoyy.api.gui.InventoryGUI;
 import com.github.buoyy.shop.Shop;
-import com.github.buoyy.shop.util.ShopItem;
+import com.github.buoyy.shop.util.GeneralShopItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class ItemBuySellGUI extends InventoryGUI {
-    private final ShopItem item;
-    public ItemBuySellGUI(ShopItem item, int pageIndex)
+    private final GeneralShopItem item;
+    public ItemBuySellGUI(GeneralShopItem item, int pageIndex)
     {
         this.inv = Bukkit.createInventory(null, 9, "Buy or Sell?");
-        this.prevInv = new GeneralShopGUI(pageIndex);
+        this.prevInv = new GeneralShopPage(pageIndex);
         this.item = item;
     }
 

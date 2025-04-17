@@ -1,10 +1,11 @@
-package com.github.buoyy.shop.gui;
+package com.github.buoyy.shop.gui.general;
 
 import com.github.buoyy.api.economy.CurrencyType;
 import com.github.buoyy.api.gui.InvButton;
 import com.github.buoyy.api.gui.InventoryGUI;
 import com.github.buoyy.shop.Shop;
-import com.github.buoyy.shop.util.ShopItem;
+import com.github.buoyy.shop.gui.MainMenuGUI;
+import com.github.buoyy.shop.util.GeneralShopItem;
 import com.github.buoyy.shop.util.ShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,12 +14,12 @@ import org.bukkit.entity.Player;
 
 import java.util.Objects;
 
-public class GeneralShopGUI extends InventoryGUI
+public class GeneralShopPage extends InventoryGUI
 {
     private final int index;
     private final FileConfiguration shop;
     private final ShopManager manager;
-    public GeneralShopGUI(int index)
+    public GeneralShopPage(int index)
     {
         this.index = index;
         this.inv = Bukkit.createInventory(null, 54, "General Shop: Page "+(index+1));
@@ -37,7 +38,7 @@ public class GeneralShopGUI extends InventoryGUI
                     .setIcon(Material.ARROW)
                     .setName("Previous Page")
                     .setOnClick(e->
-                            Shop.getShopManager().openShopPage((Player)e.getWhoClicked(), index-1))
+                            Shop.getShopManager().openGeneralShopPage((Player)e.getWhoClicked(), index-1))
                     .build();
             this.addButton(47, prevPage);
         }
@@ -47,7 +48,7 @@ public class GeneralShopGUI extends InventoryGUI
                     .setIcon(Material.ARROW)
                     .setName("Next Page")
                     .setOnClick(e->
-                            Shop.getShopManager().openShopPage((Player)e.getWhoClicked(), index+1))
+                            Shop.getShopManager().openGeneralShopPage((Player)e.getWhoClicked(), index+1))
                     .build();
             this.addButton(51, nextPage);
         }
@@ -65,9 +66,11 @@ public class GeneralShopGUI extends InventoryGUI
     {
         Material material = Material.valueOf(shop.getString(i+".item"));
         CurrencyType currency = CurrencyType.valueOf(shop.getString(i+".currency"));
+        boolean prioritiseStack = shop.getBoolean(i+".is-stack");
         int buyPrice = Integer.parseInt(Objects.requireNonNull(shop.getString(i + ".buy")));
         int sellPrice = Integer.parseInt(Objects.requireNonNull(shop.getString(i + ".sell")));
-        ShopItem item = new ShopItem(material, currency, buyPrice, sellPrice, -1, index);
+        GeneralShopItem item = new GeneralShopItem(material, currency, buyPrice,
+                sellPrice, index, prioritiseStack);
         this.addButton(i-(index*45), item.button);
     }
     private void addAllItems()
