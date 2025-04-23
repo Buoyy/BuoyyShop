@@ -32,10 +32,10 @@ public class ChatInputListener implements Listener
                     input);
             case BUY_STACK ->
                     manager.buyGeneralItem(sender, manager.getItemByPlayer(sender.getPlayer()),
-                            64*input);
+                            manager.getItemByPlayer(sender.getPlayer()).getStackSize()*input);
             case SELL_STACK ->
                     manager.sellGeneralItem(sender, manager.getItemByPlayer(sender.getPlayer()),
-                            64*input);
+                            manager.getItemByPlayer(sender.getPlayer()).getStackSize()*input);
         }
     }
 }

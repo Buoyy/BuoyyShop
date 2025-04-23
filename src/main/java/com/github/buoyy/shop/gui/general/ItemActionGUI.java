@@ -43,17 +43,17 @@ public class ItemActionGUI extends InventoryGUI {
                 .setOnClick(e->
                 {
                     manager.buyGeneralItem((Player) e.getWhoClicked(), item,
-                            item.prioritiseStack ? 64 : 1);
+                            item.prioritiseStack ? item.getStackSize() : 1);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
         InvButton buy64 = InvButton.Builder.newBuilder()
                 .setIcon(Material.GREEN_WOOL)
-                .setName(item.prioritiseStack ? "Buy 4 stacks" : "Buy 64")
+                .setName(item.prioritiseStack ? "Buy 4 stacks" : "Buy a stack")
                 .setOnClick(e->
                 {
                     manager.buyGeneralItem((Player) e.getWhoClicked(), item,
-                            item.prioritiseStack ? 256 : 64);
+                            item.prioritiseStack ? 4* item.getStackSize() : item.getStackSize());
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
@@ -88,7 +88,7 @@ public class ItemActionGUI extends InventoryGUI {
                 .setOnClick(e->
                 {
                     manager.sellGeneralItem((Player) e.getWhoClicked(), item,
-                            item.prioritiseStack ? 64 : 1);
+                            item.prioritiseStack ? item.getStackSize() : 1);
                     e.getWhoClicked().closeInventory();
                 })
                 .build();
@@ -98,7 +98,7 @@ public class ItemActionGUI extends InventoryGUI {
                 .setOnClick(e->
                 {
                     manager.sellGeneralItem((Player) e.getWhoClicked(), item,
-                            item.prioritiseStack ? 256 : 64);
+                            item.prioritiseStack ? 4* item.getStackSize() : item.getStackSize());
                     e.getWhoClicked().closeInventory();
                 })
                 .build();

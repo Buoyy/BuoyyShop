@@ -34,6 +34,10 @@ public class GeneralShopItem {
                         openItemMenu((Player) e.getWhoClicked(), pageIndex))
                 .build();
     }
+    public int getStackSize()
+    {
+        return this.material.getMaxStackSize();
+    }
     private void openItemMenu(Player player, int pageIndex)
     {
         Shop.getGuiManager().openGUI(player, new ItemBuySellGUI(this, pageIndex));

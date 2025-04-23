@@ -85,36 +85,34 @@ public class ShopManager {
     {
         Shop.getGuiManager().openGUI(player, new ShopkeepersGUI(player));
     }
-    public void registerAsShopkeeper(OfflinePlayer player)
+    public void loadKeeper(OfflinePlayer player)
     {
-        List<String> shopkeepers = config.getStringList("shopkeepers");
-        shopkeepers.add(player.getUniqueId().toString());
-        config.set("shopkeepers", shopkeepers);
-        loadShopkeeper(player);
-        Shop.getInstance().saveConfig();
-    }
-    private void loadShopkeeper(OfflinePlayer player)
-    {
-        shopkeeperShopMap.put(player.getUniqueId(), new YAML(Shop.getInstance().getName(),
-                "shops/"+player.getUniqueId(), Shop.getMessenger()));
-    }
-    public void loadShopkeepers()
-    {
-        List<OfflinePlayer> shopkeepers = new ArrayList<>();
-        for (String i : config.getStringList("shopkeepers"))
+        // Add UUID in config
+        List<String> keepers = config.getStringList("shopkeepers");
+        if (!keepers.contains(player.getUniqueId().toString()))
         {
-            UUID uuid = UUID.fromString(i);
-            shopkeepers.add(Bukkit.getOfflinePlayer(uuid));
+            keepers.add(player.getUniqueId().toString());
+            config.set("shopkeepers", keepers);
+            Shop.getInstance().saveConfig();
         }
-        for (OfflinePlayer p : shopkeepers)
+        // Create shop YAML, if not already created
+        YAML file = new YAML(Shop.getInstance().getName(),
+                "shops/"+player.getUniqueId(), Shop.getMessenger());
+        shopkeeperShopMap.put(player.getUniqueId(), file);
+    }
+    public void loadExistingKeepers()
+    {
+        for (OfflinePlayer player : Bukkit.getOfflinePlayers())
         {
-            loadShopkeeper(p);
+            loadKeeper(player);
         }
     }
-    public void registerItemPack(OfflinePlayer shopkeeper, ItemPack pack)
+    public void registerPack(OfflinePlayer keeper, ItemPack pack)
     {
-        YAML shop = shopkeeperShopMap.get(shopkeeper.getUniqueId());
-        int numOfPacks = shop.getConfig().getKeys(false).size();
-        shop.getConfig().set(String.valueOf(numOfPacks-1), pack.icon);
+        YAML file = shopkeeperShopMap.get(keeper.getUniqueId());
+        int currentAmount = file.getConfig().getKeys(false).size();
+        file.getConfig().set(currentAmount+".curr", pack.curr);
+        file.getConfig().set(currentAmount+".cost", pack.cost);
+        file.getConfig().set(currentAmount+".pack", pack.icon);
     }
 }

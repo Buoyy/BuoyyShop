@@ -5,6 +5,7 @@ import com.github.buoyy.api.economy.IEconomy;
 import com.github.buoyy.api.file.YAML;
 import com.github.buoyy.api.gui.GUIManager;
 import com.github.buoyy.api.util.Messenger;
+import com.github.buoyy.shop.command.CommandRegKeeper;
 import com.github.buoyy.shop.gui.GUIListener;
 import com.github.buoyy.shop.gui.MainMenuGUI;
 import com.github.buoyy.shop.util.ShopManager;
@@ -36,6 +37,7 @@ public final class Shop extends JavaPlugin {
         messenger.consoleGood("Hooked with BuoyyEcon.");
         registerEvents();
         registerCommands();
+        shopManager.loadExistingKeepers();
     }
 
     private void instanceObjects() {
@@ -72,6 +74,7 @@ public final class Shop extends JavaPlugin {
     {
         BaseCommand mainCmd = new BaseCommand("/shop", p->
                 guiManager.openGUI(p, new MainMenuGUI()));
+        mainCmd.registerSubCommand("reg", new CommandRegKeeper());
         Objects.requireNonNull(getCommand("shop")).setExecutor(mainCmd);
     }
 
